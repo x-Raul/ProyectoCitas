@@ -1,0 +1,76 @@
+﻿@model List<Citas_.Models.UsuarioCitaModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main>
+    <div class="row" style="margin-top:30px">
+        <div class="col-sm-12">
+
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4>Lista de Citas ADMIN</h4>
+                </div>
+                <div class="panel-body">
+                    <hr />
+                    <a class="btn btn-success btn-sm" href="@Url.Action("Index","Users")">Ver usuarios</a>
+                    <div class="table-responsive">
+                        <br />
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de usuario</th>
+                                    <th>Email de usuario</th>
+                                    <th>Marca de vehículo</th>
+                                    <th>Modelo de vehículo</th>
+                                    <th>Año de vehículo</th>
+                                    <th>Fecha de cita</th>
+                                    <th>Estado de cita</th>
+                                    <th>Comentario de cita</th>
+                                    <th>Fecha de finalización de cita</th>
+                                    <th>Cita ID</th>
+                                    <th>Responder Cita</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cita in Model)
+                                {
+                                    <tr>
+                                        <td>@cita.NombreUsuario</td>
+                                        <td>@cita.EmailUsuario</td>
+                                        <td>@cita.MarcaVehiculo</td>
+                                        <td>@cita.ModeloVehiculo</td>
+                                        <td>@cita.AnioVehiculo</td>
+                                        <td>@cita.InitDateCita.ToShortDateString() @cita.InitDateCita.ToShortTimeString()</td>
+                                        <td>@cita.EstadoCita</td>
+                                        <td>@cita.ComentarioCita</td>
+                                        <td>
+                                            @if (cita.EndDateCita.HasValue)
+                                            {
+                                                @cita.EndDateCita.Value.ToShortDateString() @cita.EndDateCita.Value.ToShortTimeString()
+                                            }
+                                        </td>
+                                        <td>@cita.IdCita</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" href="@Url.Action("Editar","Admin", new { id = cita.IdCita })">Responder</a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-danger btn-sm" href="@Url.Action("Delete","Admin", new { id = cita.IdCita })">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</main>

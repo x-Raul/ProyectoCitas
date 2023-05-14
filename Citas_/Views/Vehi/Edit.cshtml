@@ -1,0 +1,89 @@
+﻿@model Citas_.Models.Vehiculos
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Editar Vehiculo</h4>
+            </div>
+            <br />
+            <div id="alert-message" class="alert" style="display:none"></div>
+            <div class="panel-body">
+                <form id="appointment-form" action="@Url.Action("Edit","Vehi") method=" post"">
+                    <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(m => m.Id)" />
+
+                    <div class="form-group">
+                        <label>Marca del Vehiculo</label>
+                        <input type="text" class="form-control" name="Marca" value="@Html.DisplayTextFor(m => m.Marca)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo del Vehiculo</label>
+                        <input type="text" class="form-control" name="Modelo" value="@Html.DisplayTextFor(m => m.Modelo)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Año del Vehiculo</label>
+                        <input type="text" class="form-control" name="Anio" value="@Html.DisplayTextFor(m => m.Anio)" />
+                    </div>
+                    <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(m => m.IdUsuario)" />
+                    <br />
+                    <button type="submit" id="btnEnviar" class="btn btn-primary">Guardar</button>
+                    <a class="btn btn-warning" href="@Url.Action("Index","Vehi")">Volver</a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script>
+            $('#appointment-form').submit(function (e) {
+                e.preventDefault(); // Previene que se mande normal
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Vehi/Edit',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            // Ocupado
+                            $('#alert-message').removeClass('alert-danger').addClass('alert-success').text(response.message).show();
+                        } else {
+                            // Libre
+                            $('#alert-message').removeClass('alert-success').addClass('alert-danger').text(response.message).show();
+                        }
+                    },
+                    error: function () {
+                        // Errores
+                        $('#alert-message').removeClass('alert-success').addClass('alert-danger').text('Error!! Pruebe mas tarde').show();
+                    }
+                });
+            });
+
+        $(document).ready(function () {
+        $("#btnEnviar").click(function () {
+        var marca = $("#Marca").val();
+        var modelo = $("#Modelo").val();
+        var anio = $("#Anio").val();
+            if (marca == "" || modelo == "" || anio == "") {
+        alert("Todos los campos son obligatorios.");
+        return false;
+        }
+
+        return true;
+        });
+        });
+
+    </script>
+
+}

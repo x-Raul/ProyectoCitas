@@ -1,0 +1,104 @@
+﻿@model Citas_.Models.UsuarioCitaModel
+
+@{
+    ViewBag.Title = "Editar";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Cita #@Html.DisplayTextFor(m => m.IdCita)</h2>
+
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Responder Cita</h4>
+            </div>
+            <br />
+            <div id="alert-message" class="alert" style="display:none"></div>
+            <div class="panel-body">
+                <form id="appointment-form" action="@Url.Action("Editar","Admin") method=" post"">
+                    <input type="hidden" class="form-control" name="Id" value="@Html.DisplayTextFor(m => m.IdCita)" />
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <input type="text" class="form-control" name="Estado" id="Estado" value="@Html.DisplayTextFor(m => m.EstadoCita)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Comentario</label>
+                        <input type="text" class="form-control" name="Comentario" id="Cmt" value="@Html.DisplayTextFor(m => m.ComentarioCita)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha y hora de terminacion</label>
+                        <input type="text" class="form-control datepicker" name="EndDate" id="EndD" value="@Html.DisplayTextFor(m => m.EndDateCita)" />
+                    </div>
+
+
+                    <br />
+                    <button type="submit" class="btn btn-primary" id="btnEnviar">Guardar</button>
+                    <a class="btn btn-warning" href="@Url.Action("Index","Admin")">Volver</a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datetimepicker({
+                changemonth: true,
+                changeyear: true
+            });
+
+            $('#appointment-form').submit(function (e) {
+                e.preventDefault(); // Previene que se mande normal
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Admin/Editar',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            // Ocupado
+                            $('#alert-message').removeClass('alert-danger').addClass('alert-success').text(response.message).show();
+                        } else {
+                            // Libre
+                            $('#alert-message').removeClass('alert-success').addClass('alert-danger').text(response.message).show();
+                        }
+                    },
+                    error: function () {
+                        // Errores
+                        $('#alert-message').removeClass('alert-success').addClass('alert-danger').text('Error!! Pruebe mas tarde').show();
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () {
+            $("#btnEnviar").click(function () {
+                var Est = $("#Estado").val();
+                var Cmt = $("#Cmt").val();
+                var EndD = $("#EndD").val();
+
+                if (Est == "" || Cmt == "" || EndD == "") {
+                    alert("Todos los campos son obligatorios.");
+                    return false;
+                }
+
+                return true;
+            });
+        });
+
+
+    </script>
+
+}

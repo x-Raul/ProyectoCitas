@@ -1,0 +1,35 @@
+﻿@model Citas_.Models.HomeCitas
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar</h2>
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Eliminar Cita</h4>
+            </div>
+            <br />
+            <div class="panel-body">
+                <div class="alert alert-danger">
+                    Quieres eliminar la cita: #@Html.DisplayTextFor(m => m.Id) con fecha de @Html.DisplayTextFor(m => m.InitDate)
+                </div>
+
+                <form action="@Url.Action("Delete","Admin")" method="post">
+                    <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(m => m.Id)" />
+
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <a class="btn btn-warning" href="@Url.Action("Index","Admin")">Volver</a>
+                </form>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+

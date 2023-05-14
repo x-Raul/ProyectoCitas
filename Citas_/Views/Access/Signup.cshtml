@@ -1,0 +1,72 @@
+﻿@model Citas_.Models.Usuarios
+
+@{
+    ViewBag.Title = "Signup";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Crear Cuenta</h4>
+            </div>
+            <br />
+            @if (ViewData["MensajeSignUp"] != null)
+            {
+                <div class="alert alert-danger">@ViewData["MensajeSignUp"]</div>
+            }
+
+
+            <div id="alert-message" class="alert" style="display:none"></div>
+            <div class="panel-body">
+                <form id="appointment-form" action="@Url.Action("SignUp","Access")" method="post">
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" id="Nombre" name="Nombre" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="Email" name="Email" />
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" id="Pass" name="Pass" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="ConfPass" name="ConfPass" />
+                    </div>
+
+                    <br />
+                    <button type="submit" id="btnEnviar" class="btn btn-primary">Registrarse</button>
+                    <a class="btn btn-warning" href="@Url.Action("Login","Access")">Iniciar sesion</a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+        $("#btnEnviar").click(function () {
+        var nombre = $("#Nombre").val();
+        var email = $("#Email").val();
+        var pass = $("#Pass").val();
+        var confPass = $("#ConfPass").val();
+
+        if (nombre == "" || email == "" || pass == "" || confPass == "") {
+        alert("Todos los campos son obligatorios.");
+        return false;
+        }
+
+        return true;
+        });
+        });
+    </script>
+}

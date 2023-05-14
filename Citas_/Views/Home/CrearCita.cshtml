@@ -1,0 +1,95 @@
+﻿@model Citas_.Models.HomeCitas
+
+@{
+    ViewBag.Title = "Registrar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Crear nueva cita</h4>
+            </div>
+            <br />
+            <div id="alert-message" class="alert" style="display:none"></div>
+            <div class="panel-body">
+                <form id="appointment-form" action="@Url.Action("Creacion","Home")" method="post">
+
+                    <div class="form-group">
+                        <label>Modelo Vehiculo</label>
+                        @Html.DropDownListFor(m => m.VehiculoId, new SelectList(ViewBag.Vehiculos, "Id", "Modelo"), new { @class = "form-control", id = "vehi" })
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha y hora de inicio</label>
+                        <input type="text" id="init" class="form-control datepicker" name="InitDate" />
+                    </div>
+
+                    <br />
+                    <button type="submit" id="btnEnviar" class="btn btn-primary">Crear Cita</button>
+                    <a class="btn btn-warning" href="@Url.Action("Index","Home")">Volver</a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datetimepicker({
+                changemonth: true,
+                changeyear: true
+            });
+
+            $('#appointment-form').submit(function (e) {
+                e.preventDefault(); // Previene que se mande normal
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Home/Creacion',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            // Ocupado
+                            $('#alert-message').removeClass('alert-danger').addClass('alert-success').text(response.message).show();
+                        } else {
+                            // Libre
+                            $('#alert-message').removeClass('alert-success').addClass('alert-danger').text(response.message).show();
+                        }
+                    },
+                    error: function () {
+                        // If there was an error communicating with the server, display a generic error message
+                        $('#alert-message').removeClass('alert-success').addClass('alert-danger').text('Error!! Pruebe mas tarde').show();
+                    }
+                });
+            });
+        });
+
+
+
+        $(document).ready(function () {
+        $("#btnEnviar").click(function () {
+        var vehi = $("#vehi").val();
+        var init = $("#init").val();
+
+        if (vehi == "" || init == "" ) {
+        alert("Todos los campos son obligatorios.");
+        return false;
+        }
+
+        return true;
+        });
+        });
+
+    </script>
+
+}

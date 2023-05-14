@@ -1,0 +1,58 @@
+﻿@model List<Citas_.Models.HomeCitas>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<main>
+    <div class="row" style="margin-top:30px">
+        <div class="col-sm-12">
+
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4>Lista de Citas</h4>
+                </div>
+                <div class="panel-body">
+                    <hr />
+                    <a class="btn btn-success btn-sm" href="@Url.Action("CrearCita","Home")">Crear Cita</a>
+                    <a class="btn btn-success btn-sm" href="@Url.Action("Index","Vehi")">Agregar Vehiculo</a>
+                    <div class="table-responsive">
+                        <br />
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Vehiculo ID</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Comentario</th>
+                                    <th>Fecha Aprox</th>
+                                    <th style="width:150px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.VehiculoId</td>
+                                        <td>@item.InitDate</td>
+                                        <td>@item.Estado</td>
+                                        <td>@item.Comentario</td>
+                                        <td>@item.EndDate</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" href="@Url.Action("Editar","Home", new { id = item.Id })">Editar</a>
+                                            <a class="btn btn-danger btn-sm" href="@Url.Action("Eliminar","Home", new { id = item.Id })">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</main>

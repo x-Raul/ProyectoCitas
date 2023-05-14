@@ -1,0 +1,56 @@
+﻿@model List<Citas_.Models.Vehiculos>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<main>
+    <div class="row" style="margin-top:30px">
+        <div class="col-sm-12">
+
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4>Lista de Citas</h4>
+                </div>
+                <div class="panel-body">
+                    <hr />
+                    <a class="btn btn-success btn-sm" href="@Url.Action("Create","Vehi")">Agregar Vehiculo</a>
+                    <div class="table-responsive">
+                        <br />
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Año</th>
+                                    <th style="width:150px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var vehiculo in Model)
+                                {
+                                    <tr>
+                                        <td>@vehiculo.Id</td>
+                                        <td>@vehiculo.Marca</td>
+                                        <td>@vehiculo.Modelo</td>
+                                        <td>@vehiculo.Anio</td>
+
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" href="@Url.Action("Edit","Vehi", new { id = vehiculo.Id })">Editar</a>
+                                            <a class="btn btn-danger btn-sm" href="@Url.Action("Delete","Vehi", new { id = vehiculo.Id })">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</main>
+

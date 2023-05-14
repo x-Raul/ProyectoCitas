@@ -1,0 +1,35 @@
+﻿@model Citas_.Models.Usuarios
+
+@{
+    ViewBag.Title = "Eliminar";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Eliminar</h2>
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Eliminar Usuario</h4>
+            </div>
+            <br />
+            <div class="panel-body">
+                <div class="alert alert-danger">
+                    Quieres eliminar el usuario: @Html.DisplayTextFor(m => m.Nombre) con email @Html.DisplayTextFor(m => m.Email) con rol de: @Html.DisplayTextFor(m => m.Tipo)
+                </div>
+
+                <form action="@Url.Action("DeleteUser","Users")" method="post">
+                    <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(m => m.Id)" />
+
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <a class="btn btn-warning" href="@Url.Action("Index","Users")">Volver</a>
+                </form>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+

@@ -1,0 +1,54 @@
+﻿@model List<Citas_.Models.Usuarios>
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main>
+    <div class="row" style="margin-top:30px">
+        <div class="col-sm-12">
+
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4>Lista de Usuarios</h4>
+                </div>
+                <div class="panel-body">
+                    <a class="btn btn-success btn-sm" href="@Url.Action("CreateUser","Users")">Agregar Usuario</a>
+                    <hr />
+                    <div class="table-responsive">
+                        <br />
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Tipo</th>
+                                    <th style="width:150px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Nombre</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.Tipo</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" href="@Url.Action("EditUser","Users", new { id = item.Id })">Editar</a>
+                                            <a class="btn btn-danger btn-sm" href="@Url.Action("DeleteUser","Users", new { id = item.Id })">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</main>

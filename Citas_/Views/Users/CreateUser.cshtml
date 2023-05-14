@@ -1,0 +1,81 @@
+﻿@model Citas_.Models.Usuarios
+
+@{
+    ViewBag.Title = "Crear";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <br />
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4>Crear Cuenta</h4>
+            </div>
+            <br />
+            @if (ViewData["MensajeSignUp"] != null)
+            {
+                <div class="alert alert-danger">@ViewData["MensajeSignUp"]</div>
+            }
+
+
+            <div id="alert-message" class="alert" style="display:none"></div>
+            <div class="panel-body">
+                <form id="appointment-form" action="@Url.Action("CreateUser","Users")" method="post">
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" id="Nombre" name="Nombre" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="Email" name="Email" />
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" id="Pass" name="Pass" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="ConfPass" name="ConfPass" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="Tipo" id="Tipo" class="form-control">
+                            <option value="user" >Usuario</option>
+                            <option value="admin" class="bg-warning">Administrador</option>
+                        </select>
+                    </div>
+                    <br />
+                    <button type="submit" id="btnEnviar" class="btn btn-primary">Crear Cuenta</button>
+                    <a class="btn btn-warning" href="@Url.Action("Index","Users")">Regresar</a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section scripts{
+<script>
+    $(document).ready(function () {
+        $("#btnEnviar").click(function () {
+            var nombre = $("#Nombre").val();
+            var email = $("#Email").val();
+            var pass = $("#Pass").val();
+            var confPass = $("#ConfPass").val();
+            var tipo = $("#Tipo").val();
+
+            if (nombre == "" || email == "" || pass == "" || confPass == "" || tipo == "") {
+                alert("Todos los campos son obligatorios.");
+                return false;
+            }
+
+            return true;
+        });
+    });
+</script>
+}
