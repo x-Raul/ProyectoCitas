@@ -22,6 +22,8 @@ namespace Citas_.Controllers
         private static List<UsuarioCitaModel> OLista = new List<UsuarioCitaModel>();
         private static List<HomeCitas> OCitasLista = new List<HomeCitas>();
 
+        private static List<Usuarios> OUsr = new List<Usuarios>();
+
         // GET: Admin
 
         public ActionResult Index()
@@ -67,6 +69,34 @@ JOIN Citas c ON v.id = c.vehiculo_id", OConnection);
             return View(ListUM);
         }
 
+        [HttpGet]
+        public ActionResult DatosUsr()
+        {
+            DatosUsr();
+            OLista.Clear();
+            List<Usuarios> ListUsrInfo = new List<Usuarios>();
+
+            using (SqlConnection OConnection = new SqlConnection(conexion))
+            {
+                int userId = Convert.ToInt32(Session["usuario_id"]);
+                Usuarios OUsrs = null;
+
+                SqlCommand cmd = new SqlCommand(@"  SELECT id, nombre, email, tipo FROM Usuarios WHERE id = @id", OConnection);
+                cmd.Parameters.AddWithValue("@id", userId);
+                cmd.CommandType = CommandType.Text;
+                OConnection.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                OUsrs = new Usuarios();                
+                OUsrs.Id = (int)reader["IdCita"];
+                OUsrs.Nombre = reader["NombreUsuario"].ToString();
+                OUsrs.Email = reader["EmailUsuario"].ToString();
+                OUsrs.Tipo = reader["MarcaVehiculo"].ToString();
+
+                ListUsrInfo.Add(OUsrs);
+                return View(ListUsrInfo);
+            }
+        }
 
         [HttpGet]
         public ActionResult Editar(int? id)
@@ -126,10 +156,10 @@ JOIN Citas c ON v.id = c.vehiculo_id", OConnection);
 
                     SqlCommand cmd = new SqlCommand("sp_EditCitaAdmin", OConnection);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("id", OCita.Id);
-                    cmd.Parameters.AddWithValue("estado", OCita.Estado);
-                    cmd.Parameters.AddWithValue("comentario", OCita.Comentario ?? "");
-                    cmd.Parameters.AddWithValue("enddate", OCita.EndDate);
+                    cmd.Parameters.AddWithValue("@id", OCita.Id);
+                    cmd.Parameters.AddWithValue("@estado", OCita.Estado);
+                    cmd.Parameters.AddWithValue("@comentario", OCita.Comentario ?? "");
+                    cmd.Parameters.AddWithValue("@enddate", OCita.EndDate);
 
                     cmd.ExecuteNonQuery();
                     OConnection.Close();
@@ -159,7 +189,7 @@ JOIN Citas c ON v.id = c.vehiculo_id", OConnection);
 
                     SqlCommand cmd = new SqlCommand("SELECT id, vehiculo_id, initdate, estado, comentario, enddate FROM Citas WHERE id = @id", OConnection);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.Parameters.AddWithValue("@id", id);
 
                     SqlDataReader reader = cmd.ExecuteReader();
 

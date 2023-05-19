@@ -86,10 +86,10 @@ namespace Citas_.Controllers
                 SqlCommand cmd = new SqlCommand("sp_RegistrarUsuario", Conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("nombre", OUsuario.Nombre);
-                cmd.Parameters.AddWithValue("email", OUsuario.Email);
-                cmd.Parameters.AddWithValue("pass", OUsuario.Pass);
-                cmd.Parameters.AddWithValue("tipo", OUsuario.Tipo);
+                cmd.Parameters.AddWithValue("@nombre", OUsuario.Nombre);
+                cmd.Parameters.AddWithValue("@email", OUsuario.Email);
+                cmd.Parameters.AddWithValue("@pass", OUsuario.Pass);
+                cmd.Parameters.AddWithValue("@tipo", OUsuario.Tipo);
                 try
                 {
                     Conn.Open();
@@ -178,12 +178,12 @@ namespace Citas_.Controllers
                 OUser.ConfPass = EncriptarMD5(OUser.ConfPass);
 
 
-                SqlCommand checkVehicleCommand = new SqlCommand("SELECT COUNT(*) FROM Usuarios WHERE id = @Id AND pass = @Pass", OConnection);
-                checkVehicleCommand.Parameters.AddWithValue("@Id", OUser.Id);
-                checkVehicleCommand.Parameters.AddWithValue("@Pass", OUser.ConfPass);
+                SqlCommand checkusrpwrd = new SqlCommand("SELECT COUNT(*) FROM Usuarios WHERE id = @Id AND pass = @Pass", OConnection);
+                checkusrpwrd.Parameters.AddWithValue("@Id", OUser.Id);
+                checkusrpwrd.Parameters.AddWithValue("@Pass", OUser.ConfPass);
 
                 OConnection.Open();
-                int usrcheckar = (int)checkVehicleCommand.ExecuteScalar();
+                int usrcheckar = (int)checkusrpwrd.ExecuteScalar();
 
                 if (usrcheckar == 0)
                 {
@@ -192,14 +192,15 @@ namespace Citas_.Controllers
                     // El ID del usuario no concide con la contra
                     return Json(new { success = false, message = "Error contraseñá incorrecta" });
                 }
+                OUser.Pass = EncriptarMD5(OUser.Pass);
 
                 SqlCommand cmd = new SqlCommand("sp_EditUsuario", OConnection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("id", OUser.Id);
-                cmd.Parameters.AddWithValue("nombre", OUser.Nombre);
-                cmd.Parameters.AddWithValue("email", OUser.Email);
-                cmd.Parameters.AddWithValue("pass", OUser.Pass);
-                cmd.Parameters.AddWithValue("tipo", OUser.Tipo);
+                cmd.Parameters.AddWithValue("@id", OUser.Id);
+                cmd.Parameters.AddWithValue("@nombre", OUser.Nombre);
+                cmd.Parameters.AddWithValue("@email", OUser.Email);
+                cmd.Parameters.AddWithValue("@pass", OUser.Pass);
+                cmd.Parameters.AddWithValue("@tipo", OUser.Tipo);
 
                 cmd.ExecuteNonQuery();
 

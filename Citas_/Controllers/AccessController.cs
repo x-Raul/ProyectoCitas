@@ -39,8 +39,8 @@ namespace Citas_.Controllers
                 SqlCommand cmd = new SqlCommand("sp_ValidarUsuario", Conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("email", OUsuario.Email);
-                cmd.Parameters.AddWithValue("pass", OUsuario.Pass);
+                cmd.Parameters.AddWithValue("@email", OUsuario.Email);
+                cmd.Parameters.AddWithValue("@pass", OUsuario.Pass);
 
                 try
                 {
@@ -100,10 +100,10 @@ namespace Citas_.Controllers
                 SqlCommand cmd = new SqlCommand("sp_RegistrarUsuario", Conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("nombre", OUsuario.Nombre);
-                cmd.Parameters.AddWithValue("email", OUsuario.Email);
-                cmd.Parameters.AddWithValue("pass", OUsuario.Pass);
-                cmd.Parameters.AddWithValue("tipo", "user");
+                cmd.Parameters.AddWithValue("@nombre", OUsuario.Nombre);
+                cmd.Parameters.AddWithValue("@email", OUsuario.Email);
+                cmd.Parameters.AddWithValue("@pass", OUsuario.Pass);
+                cmd.Parameters.AddWithValue("@tipo", "user");
                 try
                 {
                     Conn.Open();

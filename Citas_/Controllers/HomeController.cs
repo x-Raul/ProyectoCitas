@@ -118,10 +118,14 @@ namespace Citas_.Controllers
                     return Json(new { success = false, message = "Error Vehiculo no existe cree uno si aun no lo agrega" });
                 }
 
-
-                SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Citas WHERE vehiculo_id = @vehiculo_id AND ((@initdate BETWEEN initdate AND DATEADD(hour, 2, initdate)) OR (DATEADD(hour, 2, @initdate) BETWEEN initdate AND DATEADD(hour, 2, initdate)))", OConnection);
-                checkCommand.Parameters.AddWithValue("vehiculo_id", OCita.VehiculoId);
-                checkCommand.Parameters.AddWithValue("initdate", OCita.InitDate);
+                //Query de prueba
+                //En base a las citas del usuario del vehiculo...
+                //SELECT COUNT(*) FROM Citas WHERE vehiculo_id = @VehiculoID  (initdate BETWEEN @InitDate AND DATEADD(hour, 2, @InitDate)) OR (DATEADD(hour, 2, initdate) BETWEEN @InitDate AND DATEADD(hour, 2, @InitDate))
+                //En base a todos las citas de todos los vehiculs
+                //SELECT COUNT(*) FROM Citas WHERE (initdate BETWEEN @InitDate AND DATEADD(hour, 2, @InitDate)) OR (DATEADD(hour, 2, initdate) BETWEEN @InitDate AND DATEADD(hour, 2, @InitDate))
+                SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Citas WHERE (initdate BETWEEN @InitDate AND DATEADD(hour, 2, @InitDate)) OR (DATEADD(hour, 2, initdate) BETWEEN @InitDate AND DATEADD(hour, 2, @InitDate))", OConnection);
+                //checkCommand.Parameters.AddWithValue("@VehiculoID", OCita.VehiculoId);
+                checkCommand.Parameters.AddWithValue("@InitDate", OCita.InitDate);
 
 
                 int count = (int)checkCommand.ExecuteScalar();
@@ -134,11 +138,11 @@ namespace Citas_.Controllers
 
                 SqlCommand cmd = new SqlCommand("sp_CreateCita", OConnection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("vehiculo_id", OCita.VehiculoId);
-                cmd.Parameters.AddWithValue("initdate", OCita.InitDate);
-                cmd.Parameters.AddWithValue("estado", "En espera");
-                cmd.Parameters.AddWithValue("comentario", OCita.Comentario ?? "");
-                cmd.Parameters.AddWithValue("enddate", OCita.InitDate.AddHours(2));
+                cmd.Parameters.AddWithValue("@vehiculo_id", OCita.VehiculoId);
+                cmd.Parameters.AddWithValue("@initdate", OCita.InitDate);
+                cmd.Parameters.AddWithValue("@estado", "En espera");
+                cmd.Parameters.AddWithValue("@comentario", OCita.Comentario ?? "");
+                cmd.Parameters.AddWithValue("@enddate", OCita.InitDate.AddHours(2));
 
                 cmd.ExecuteNonQuery();
                 }
@@ -215,8 +219,8 @@ namespace Citas_.Controllers
 
 
                 SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Citas WHERE vehiculo_id = @vehiculo_id AND enddate > @initdate", OConnection);
-                checkCommand.Parameters.AddWithValue("vehiculo_id", OCita.VehiculoId);
-                checkCommand.Parameters.AddWithValue("initdate", OCita.InitDate);
+                checkCommand.Parameters.AddWithValue("@vehiculo_id", OCita.VehiculoId);
+                checkCommand.Parameters.AddWithValue("@initdate", OCita.InitDate);
 
                 int count = (int)checkCommand.ExecuteScalar();
                 if (count > 0)
@@ -228,12 +232,12 @@ namespace Citas_.Controllers
 
                     SqlCommand cmd = new SqlCommand("sp_EditCita", OConnection);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("id", OCita.Id);
-                    cmd.Parameters.AddWithValue("vehiculo_id", OCita.VehiculoId);
-                    cmd.Parameters.AddWithValue("initdate", OCita.InitDate);
-                    cmd.Parameters.AddWithValue("estado", "En espera");
-                    cmd.Parameters.AddWithValue("comentario", OCita.Comentario ?? "");
-                    cmd.Parameters.AddWithValue("enddate", OCita.InitDate.AddHours(2));
+                    cmd.Parameters.AddWithValue("@id", OCita.Id);
+                    cmd.Parameters.AddWithValue("@vehiculo_id", OCita.VehiculoId);
+                    cmd.Parameters.AddWithValue("@initdate", OCita.InitDate);
+                    cmd.Parameters.AddWithValue("@estado", "En espera");
+                    cmd.Parameters.AddWithValue("@comentario", OCita.Comentario ?? "");
+                    cmd.Parameters.AddWithValue("@enddate", OCita.InitDate.AddHours(2));
 
                     cmd.ExecuteNonQuery();
                 }
@@ -264,7 +268,7 @@ namespace Citas_.Controllers
             using (SqlConnection OConnection = new SqlConnection(conexion))
             {
                 SqlCommand cmd = new SqlCommand("sp_DeleteCita", OConnection);
-                cmd.Parameters.AddWithValue("id", Id);
+                cmd.Parameters.AddWithValue("@id", Id);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 OConnection.Open();
